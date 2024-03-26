@@ -23,7 +23,7 @@ import Expenses from "@/components/Expenses";
 
 export default function Home() {
   const expenses = [
-    { icon: "🍔", title: "Food", amount: -100, date: new Date() },
+    { icon: "🍔", title: "Food", amount: -100, date: new Date(Date.parse('04 Dec 2023 00:34:12')) },
     { icon: "🚗", title: "Transport", amount: -50, date: new Date() },
     { icon: "💻", title: "Technology", amount: -200, date: new Date() },
     { icon: "🛒", title: "Shopping", amount: -80, date: new Date() },
