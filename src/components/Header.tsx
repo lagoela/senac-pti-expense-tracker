@@ -1,11 +1,11 @@
+import { LogOut, Moon } from "lucide-react";
+
 export default function Header() {
     return (
-        <header className="sticky text-center bg-white rounded-b-[12px] py-2 shadow-lg top-0 space-x-2 text-black md:flex md:flex-row md:justify-around border-b-[1px] border-zinc-100">
-            <div className="space-x-2 md:flex flex-row gap-2">
-                <a href="">home</a>
-                <a href="">despesas</a>
-                <a href="">ganhos</a>
-            </div>
+        <header className="sticky top-0 bg-white flex flex-row items-center justify-between px-4 py-2 w-full">
+          <Moon className="w-8 h-8" />
+          <h1 className="">Expenses</h1>
+          <LogOut className="w-8 h-8" />
         </header>
     );
 }
