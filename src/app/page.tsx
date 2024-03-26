@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Header from "../components/Header";
-import Expense from "../components/Expense";
 import { Moon, LogOut, Plus, PieChart, Megaphone } from "lucide-react";
 import {
   Dialog,
@@ -17,17 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import Expenses from "@/components/Expenses";
 
 export default function Home() {
   const expenses = [
@@ -62,18 +54,7 @@ export default function Home() {
             <h3 className="">Spent this month</h3>
             <h1 className={`text-4xl ${getAllExpenses() < 0 ? "text-red-400" : "text-green-500"}`}>{`R$ ${getAllExpenses().toFixed(2)}`}</h1>
           </div>
-          <div className="flex flex-col gap-2 w-full px-4">
-            {expenses.map((expense, index) => (
-              <li key={index} className="list-none">
-                <Expense
-                  icon={expense.icon}
-                  title={expense.title}
-                  amount={expense.amount}
-                  date={expense.date}
-                />
-              </li>
-            ))}
-          </div>
+          <Expenses expenses={expenses}/>
         </div>
         <Footer />
       </div>
