@@ -16,7 +16,7 @@ export default function Expense({ icon, title, amount, date, className }: Expens
                 <span className="text-gray-500">{date.toTimeString().substring(0, 5)}</span>
             </div>
             <div className="flex flex-row items-center">
-                <h3 className={`mr-2 ${amount < 0 ? "text-red-400" : "text-black"}`}>{'R$ ' + amount}</h3>
+                <h3 className={`mr-2 ${amount < 0 ? "text-red-400" : "text-green-500"}`}>{'R$ ' + amount}</h3>
             </div>
         </div>
     )
