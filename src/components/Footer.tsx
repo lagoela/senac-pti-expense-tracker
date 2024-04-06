@@ -15,14 +15,22 @@ import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { revalidatePath } from "next/cache";
+import EmojiPicker from "emoji-picker-react";
 
-export default function Footer(createExpenseFunc: any) {
+export default function Footer({createExpenseFunc}: {createExpenseFunc: Function}){
 
   const [drawerState, setDrawerState] = useState<boolean>(false);
 
   const [tag, setTag] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [amount, setAmount] = useState<number>();
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState<boolean>(false);
+
+  const clearInputs = () => {
+    setTag("");
+    setTitle("");
+    setAmount(undefined);
+  }
 
   const handleSubmit = (e: {preventDefault(): void}) => {
     e.preventDefault();
@@ -33,9 +41,13 @@ export default function Footer(createExpenseFunc: any) {
     }
 
     createExpenseFunc({ tag, title, amount });
-    
+    clearInputs();
     setDrawerState(false);
     revalidatePath;
+  }
+
+  const createTestExpense = () => {
+    createExpenseFunc({ tag: "🪲", title: "Test", amount: 100 });
   }
 
   return (
@@ -59,17 +71,17 @@ export default function Footer(createExpenseFunc: any) {
                 <DrawerTitle className="text-2xl">Add Expense</DrawerTitle>
                 <DrawerClose />
               </DrawerHeader>
-              <form className="flex flex-col" onSubmit={(e) => {handleSubmit(e)}}>
-                <h1 className="text-2xl mx-auto">Please select your tag</h1>
-                <input
-                  type="text"
-                  placeholder=""
-                  maxLength={2}
-                  className="w-[25%] mb-14 mx-auto text-center text-6xl border-b-[1px]
-                  focus:outline-none"
-                  value={tag}
-                  onChange={(e) => setTag(e.target.value)}
-                />
+              <form className="flex flex-col px-4" onSubmit={(e) => {handleSubmit(e)}}>
+                <h1 className="text-2xl">Please select your tag</h1>
+                <Button variant="secondary" size="lg" className="w-full" type="button" onClick={(e) => {setEmojiPickerOpen(true)}}>
+                  {tag ? "Change Emoji" : "Open Emoji Picker"}
+                </Button>
+                {tag && <div className="flex flex-row gap-2 py-2">
+                  <span className="text-5xl mx-auto my-4">{tag}</span>
+                </div>}
+                {emojiPickerOpen && <div className="flex flex-row gap-2 py-2">
+                  <EmojiPicker onEmojiClick={(emoji, e) => {setTag(emoji.emoji); setEmojiPickerOpen(false)}} />
+                </div>}
                 <div className="grid grid-cols-2 items-center py-2">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="title" className="pr-4 flex-2">
@@ -108,7 +120,7 @@ export default function Footer(createExpenseFunc: any) {
                       Add Expense
                     </Button>
                     <DrawerClose>
-                      <Button variant="outline" size="lg">
+                      <Button variant="outline" size="lg" type="button">
                         Cancel
                       </Button>
                     </DrawerClose>
@@ -117,6 +129,9 @@ export default function Footer(createExpenseFunc: any) {
               </form>
             </DrawerContent>
           </Drawer>
+        </div>
+        <div className="">
+          <button onClick={(e) => {createTestExpense()}}>test</button>
         </div>
       </div>
     </footer>

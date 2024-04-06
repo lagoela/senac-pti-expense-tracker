@@ -22,7 +22,7 @@ import Footer from "@/components/Footer";
 import Expenses from "@/components/Expenses";
 import { start } from "repl";
 
-export interface Expenses {
+export interface ExpensesProps {
   icon: string;
   title: string;
   amount: number;
@@ -30,15 +30,14 @@ export interface Expenses {
 }
 
 export default function Home() {
-  const [expenses, setExpenses] = useState<Expenses[]>([]);
+  const [expenses, setExpenses] = useState<ExpensesProps[]>([]);
 
   useEffect(() => {
-    localStorage.setItem("expenses", JSON.stringify(expenses));
-
     if (localStorage.getItem("expenses")) {
       const local_data = localStorage.getItem("expenses");
-      JSON.parse(local_data as string).forEach((expense: Expenses) => {
-        setExpenses((prev) => [...prev, expense]);
+      JSON.parse(local_data as string).forEach((expense: ExpensesProps) => {
+        expense.date = new Date(expense.date);
+        setExpenses([...expenses, expense]);
       });
     }
   }, []);
@@ -53,14 +52,17 @@ export default function Home() {
     return expensesValue;
   };
 
-  
+  function removeExpense (index: number) {
+    setExpenses(expenses.filter((_, i) => i !== index))
+  }
+
   function addNewExpense ({ tag, title, amount }: { tag: string; title: string; amount: number }) {
     setExpenses((prev) => [...prev, { icon: tag, title, amount, date: new Date() }]);
   };
 
   return (
     <main className="flex flex-col items-center">
-      <div className="bg-white flex flex-col justify-center items-center w-full xl:w-[430px] z-0">
+      <div className={`bg-white flex flex-col justify-center items-center w-full xl:w-[430px] z-0 ${expenses.length === 0 ? 'mb-30': 'mb-32'}`}>
         <Header />
         <div className="flex flex-col items-center gap-2 w-full">
           <div className="flex flex-col items-center justify-center w-full h-[450px]">
@@ -77,9 +79,9 @@ export default function Home() {
               R$ {getAllExpenses().toFixed(2)}
             </h1>
           </div>
-          <Expenses expenses={expenses} />
+          <Expenses expenses={expenses} removeExpense={removeExpense} />
         </div>
-        <Footer createExpenseFunc={addNewExpense} />
+        <Footer createExpenseFunc={addNewExpense}/>
       </div>
     </main>
   );
